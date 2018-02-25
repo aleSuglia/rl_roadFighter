@@ -134,25 +134,12 @@ for i = 1:episodeLength
     
     actionTaken = pi_test1( realAgentLocation(1), realAgentLocation(2) );
     
-    % The $GridMap$ functions $getTransitions$ and $getReward$ act as the 
-    % problems transition and reward function respectively.
-    %
-    % $actionMoveAgent$ can be used to simulate agent (the car) behaviour.
-    
-%     [ possibleTransitions, probabilityForEachTransition ] = ...
-%         MDP_1.getTransitions( realAgentLocation, actionTaken );
-%     [ numberOfPossibleNextStates, ~ ] = size(possibleTransitions);
-%     previousAgentLocation = realAgentLocation;
-    
     [ agentRewardSignal, realAgentLocation, currentTimeStep, ...
         agentMovementHistory ] = ...
         actionMoveAgent( actionTaken, realAgentLocation, MDP_1, ...
         currentTimeStep, agentMovementHistory, ...
         probabilityOfUniformlyRandomDirectionTaken ) ;
-
-%     MDP_1.getReward( ...
-%             previousAgentLocation, realAgentLocation, actionTaken )
-    
+  
     Return = Return + agentRewardSignal;
     
     % If you want to view the agents behaviour sequentially, and with a 

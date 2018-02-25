@@ -103,5 +103,94 @@ while (policyStable == false)
     
     [agent, policyStable] = agent.policyImprovement(MDP_1);
 end
+
+disp(agent.policy)
+disp(numIterations)
+
+currentTimeStep = 0 ;
+currentMap = MDP_1 ;
+agentLocation = currentMap.Start ;
+startingLocation = agentLocation ; % Keeping record of initial location.
+realAgentLocation = agentLocation;
+
+% If you need to keep track of agent movement history:
+%
+agentMovementHistory = zeros(episodeLength+1, 2) ;
+%
+agentMovementHistory(currentTimeStep + 1, :) = agentLocation ;
+
+%% PRINT MAP:
+% You can update viewableGridMap in a similar way as below, in order to
+% keep track of the current visible area for your car (don't use this with
+% road bases since the whole map should be visible at any time in that case
+% ): 
+viewableGridMap = ...
+    setCurrentViewableGridMap( MDP_1, agentLocation, blockSize ) ;
+% When printing $viewableGridMap.Grid$ notice that the row numbers no
+% longer correspond to the original test map rows. Use $agentLocation(1)$  
+% to keep track of your current row in the complete test map.
+
+refreshScreen % See $refreshScreen$ function for details.
+
+
+%% TEST ACTION TAKING, MOVING WINDOW AND TRAJECTORY PRINTING:
+% Simulating agent behaviour when following the policy defined by 
+% $pi_test1$.
+%
+% Commented lines also have examples of use for $GridMap$'s $getReward$ and
+% $getTransitions$ functions, which act as our reward and transition
+% functions respectively.
+
+Return = 0;
+
+for i = 1:episodeLength
     
+    actionTaken = agent.policy( realAgentLocation(1), realAgentLocation(2) );
+    
+    % The $GridMap$ functions $getTransitions$ and $getReward$ act as the 
+    % problems transition and reward function respectively.
+    %
+    % $actionMoveAgent$ can be used to simulate agent (the car) behaviour.
+    
+%     [ possibleTransitions, probabilityForEachTransition ] = ...
+%         MDP_1.getTransitions( realAgentLocation, actionTaken );
+%     [ numberOfPossibleNextStates, ~ ] = size(possibleTransitions);
+%     previousAgentLocation = realAgentLocation;
+    
+    [ agentRewardSignal, realAgentLocation, currentTimeStep, ...
+        agentMovementHistory ] = ...
+        actionMoveAgent( actionTaken, realAgentLocation, MDP_1, ...
+        currentTimeStep, agentMovementHistory, ...
+        probabilityOfUniformlyRandomDirectionTaken ) ;
+
+%     MDP_1.getReward( ...
+%             previousAgentLocation, realAgentLocation, actionTaken )
+    
+    Return = Return + agentRewardSignal;
+    
+    % If you want to view the agents behaviour sequentially, and with a 
+    % moving view window, try using $pause(n)$ to pause the screen for $n$
+    % seconds between each draw:
+       
+    [ viewableGridMap, agentLocation ] = setCurrentViewableGridMap( ...
+        MDP_1, realAgentLocation, blockSize );
+    % $agentLocation$ is the location on the viewable grid map for the 
+    % simulation. It is used by $refreshScreen$.
+    
+    currentMap = viewableGridMap ; %#ok<NASGU>
+    % $currentMap$ is keeping track of which part of the full test map
+    % should be printed by $refreshScreen$ or $printAgentTrajectory$.
+    
+    refreshScreen
+    
+    pause(0.15)
+    
+end
+
+currentMap = MDP_1 ;
+agentLocation = realAgentLocation ;
+
+Return
+
+printAgentTrajectory
 
