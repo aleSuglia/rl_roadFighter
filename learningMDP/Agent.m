@@ -89,10 +89,9 @@ classdef Agent
             for i = (1:MDP.GridSize(1))
                 for j = (1:MDP.GridSize(2))
                     currState = [i,j];
-                    bestActionValueFunction = 0;
+                    actionValues = zeros(1, agent.numActions);
                     actionTaken = agent.policy(i, j);
-                    bestAction = actionTaken;
-                    
+           
                     for a = (1:agent.numActions)
                         [nextStates, probs] = MDP.getTransitions(...
                                 currState, ...
@@ -108,12 +107,11 @@ classdef Agent
                             reward = MDP.getReward(currState, nextState, a);
                             currActionStateValue = currActionStateValue + probs(ns) * (reward + agent.stateValues(nextState(1), nextState(2)));
                         end
-
-                        if (currActionStateValue > bestActionValueFunction)
-                            bestActionValueFunction = currActionStateValue;
-                            bestAction = a;
-                        end
+                        
+                        actionValues(a) = currActionStateValue;
                     end
+                    
+                    [~, bestAction] = max(actionValues);
                     
                     agent.policy(currState(1), currState(2)) = bestAction;
                     

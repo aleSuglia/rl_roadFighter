@@ -1,3 +1,6 @@
+%seed = 123;
+%rng(seed) 
+
 %% ACTION CONSTANTS:
 UP_LEFT = 1 ;
 UP = 2 ;
