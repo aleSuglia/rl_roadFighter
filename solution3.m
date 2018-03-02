@@ -92,22 +92,29 @@ pi_test1(:, 1) = UP_RIGHT; % When on the leftmost column, go up right.
 pi_test1(:, 5) = UP_LEFT ; % When on the rightmost column, go up left.
 pi_test1(:, 3) = UP_LEFT ; % When on the center column, go up left.
 
+% Initialise the agent with the specified MDP and policy
 agent = Agent(MDP_1, pi_test1, MDP_1.Start, NUM_ACTIONS);
 
+% Policy iteration algorithm
 policyStable = false;
 numIterations = 0;
 
 while (policyStable == false)
     numIterations = numIterations + 1;
+    % evaluate the current policy of the agent according to the policy
+    % evaluation algorithm
     [agent, numIterPolicyEval] = agent.policyEvaluation(MDP_1, 1e-5);
 
     disp(agent.stateValues)
     disp(numIterPolicyEval)
     
+    % improve the agent policy by using the policy iteration algorithm
     [agent, policyStable] = agent.policyImprovement(MDP_1);
 end
 
+disp("Final agent policy");
 disp(agent.policy)
+disp("Policy iteration # iterations");
 disp(numIterations)
 
 currentTimeStep = 0 ;
