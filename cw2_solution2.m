@@ -65,9 +65,11 @@ Q_test1(:,:,3) = 100;% obviously this is not a correctly computed Q-function; it
 % Monte-Carlo: 0
 % TD-learning (Q-Learning): 1
 ALGORITHM = 1;
-originalEpsilon = 0.9;
+% probability to take a random action in the epsilon greedy strategy
+originalEpsilon = 0.8;
 epsilon = originalEpsilon;
-lambda = 1.0;
+% decay rate for the epsilon greedy strategy
+lambda = 0.9;
 numTestEpisodes = 10;
 numTrainEpisodes = 1000;
 

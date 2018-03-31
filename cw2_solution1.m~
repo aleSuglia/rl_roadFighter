@@ -146,7 +146,7 @@ for e = 1:numTrainEpisodes
     end
     
     % if the value function at the current step is not changed so much from
-    % the previous one stop the training procedure
+    % 
     if abs(agent.valueParameters - prevValueParameters) < eps(0.5)
         disp("V-function parameters are not changing anymore.")
         break
