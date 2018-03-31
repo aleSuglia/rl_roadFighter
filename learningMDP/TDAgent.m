@@ -1,7 +1,6 @@
 classdef TDAgent
-    %MCAGENT Summary of this class goes here
-    %   Detailed explanation goes here
-    
+    %TDAgent learning agent which exploits Q-Learning to learn to 
+    % navigate in the environment
     properties
         qValueParameters
         valueParameters

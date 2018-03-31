@@ -115,6 +115,7 @@ for e = 1:numTrainEpisodes
         % Use the $getStateFeatures$ function as below, in order to get the
         % feature description of a state:
         stateFeatures = MDP.getStateFeatures(currState); % dimensions are 4rows x 5columns
+        % act greedily with respect to the Q_test1 policy
         for action = 1:3
             action_values(action) = ...
                 sum ( sum( Q_test1(:,:,action) .* stateFeatures ) );
@@ -137,11 +138,12 @@ for e = 1:numTrainEpisodes
         currState = nextState;
     end
     
+    % improve the value function parameters 
     agent = agent.policyEvaluation(MDP, episode);
     disp("V-function parameters after Gradient descent step");
     disp(agent.valueParameters);
     
-    % decay the learning rate and the epsilon every 10 episodes
+    % decay the learning rate and the epsilon every 5 episodes
     if mod(e, 5) == 0 
         agent.learningRate = agent.initLearningRate * exp(-agent.lambdaDecay*agent.numUpdates);
     end

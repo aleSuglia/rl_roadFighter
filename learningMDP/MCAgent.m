@@ -1,4 +1,6 @@
 classdef MCAgent
+    % MCAgent learning agent that exploits First-visit Monte-Carlo to learn
+    % to navigate in the environment
     properties
         qValueParameters
         valueParameters
